@@ -23,6 +23,11 @@ end
 DataMapper.finalize
 User.auto_upgrade!
 
+# functions
+def active_page?(path='')
+	request.path_info == '/' + path
+end
+
 # routes
 get '/' do	
 	@first_name = session[:first_name]
@@ -30,7 +35,11 @@ get '/' do
 	erb :home
 end
 
-# NOT WORKING
+get '/schedule' do
+	@first_name = session[:first_name]
+	erb :schedule
+end
+
 post '/login_process' do
 	user = User.first(:email => params[:email])
 	@email = params[:email]
