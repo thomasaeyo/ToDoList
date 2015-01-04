@@ -1,0 +1,14 @@
+BuddyChecker(temporary name)
+: Friends check each other's daily/weekly/monthly tasks
+
+MAIN
+: A big schedule(you can toggle between day/week/month)
+: be able to add tasks like iCalendar
+
+FRIENDS
+: list of friends
+: mark your checkbuddy specially
+
+TODO
+: put in your task/hw
+	- Brief explanation of the task/Class/Due date

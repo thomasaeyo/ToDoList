@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Thomas Lee">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>BuddyChecker</title>
+    <!-- Bootstrap core CSS -->
+    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- fullcalendar -->
+		<link rel='stylesheet' href='lib/fullcalendar/fullcalendar.css' />
+    <link rel='stylesheet' href='lib/fullcalendar/fullcalendar.print.css' media='print' />
+		<script src='lib/fullcalendar/lib/jquery.min.js'></script>
+		<script src='lib/fullcalendar/lib/moment.min.js'></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src='lib/fullcalendar/fullcalendar.min.js'></script>
+    <script src='js/fullcalendar.js'></script>
+  </head>
+
+  <body style="padding-top: 70px;">
+  	<!-- Top nav bar -->
+  	<%= erb :nav %>
+  	<!-- Main -->
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+          <div id="calendar" style="padding-bottom:70px"></div>
+        </div>
+      </div> 
+    </div>
+      
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+	</body>
+</html>
