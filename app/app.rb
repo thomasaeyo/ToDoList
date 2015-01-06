@@ -87,7 +87,6 @@ post '/task/new' do
 end
 
 # is this optimal?
-# cache
 get '/task/getAllTasks' do
 	content_type :json
 
@@ -100,6 +99,31 @@ get '/task/getAllTasks' do
 	end
 
 	REDIS.get(session[:user_id])
+end
+
+post '/task/edit' do
+	task = Task.first(:user_id => session[:user_id], :title => params[:title])
+	# database
+	task.attributes = {:start => params[:start], :end => params[:end]}
+	task.save
+	# cache (just recopy everything..)
+	json = []
+	Task.all(:user_id => session[:user_id]).each do |task|
+		json << JSON[task.to_json(:exclude => [:user_id, :id])]
+	end
+	REDIS.set(session[:user_id], json.to_json)
+end
+
+post '/task/remove' do
+	# database
+	task = Task.first(:user_id => session[:user_id], :title => params[:title])
+	task.destroy
+	# cache (just recopy everything..)
+	json = []
+	Task.all(:user_id => session[:user_id]).each do |task|
+		json << JSON[task.to_json(:exclude => [:user_id, :id])]
+	end
+	REDIS.set(session[:user_id], json.to_json)
 end
 
 post '/login_process' do
@@ -145,13 +169,3 @@ get '/sign_out' do
 	session.clear
 	redirect '/'
 end
-
-# get '/create_tasks' do
-# 	Task.create(
-# 		:user => session[:user_id],
-# 		:title => "A",
-# 		:start_time => params[:start],
-# 		:end_time => params[:end]
-# 		)
-# 	redirect back 
-# end
