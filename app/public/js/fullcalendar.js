@@ -19,7 +19,6 @@ $(document).ready(function() {
 		                title: title,
 		                start: start,
 		                end: end,
-		                allDay: allDay
 		            },
 		            true
 		        );
@@ -98,5 +97,4 @@ $(document).ready(function() {
 			}
 		]
 	});
-	
 });
