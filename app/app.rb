@@ -2,12 +2,21 @@ require 'sinatra'
 require 'data_mapper'
 require 'time'
 require 'json'
-require 'dm-serializer/to_json'
+require 'redis'
 
+#####################################
+# 			CONFIGURATION 			#
+#####################################
 set :public_folder, 'public'
 
 enable :sessions
 set :session_secret, 'nottellingyou'
+
+configure do
+  REDISTOGO_URL = "redis://localhost:6379/"
+  uri = URI.parse(REDISTOGO_URL)
+  REDIS = Redis.new(:host => uri.host, :port => uri.port, :password => uri.password)
+end
 
 #################################
 # 			DATABASE 			#
@@ -63,23 +72,34 @@ get '/schedule' do
 end
 
 post '/task/new' do
-	Task.create(
-		:user_id => session[:user_id],
-		:title => params[:title],
-		:start => params[:start],
-		:end => params[:end],
+	new_task = 
+		Task.create(
+			:user_id => session[:user_id],
+			:title => params[:title],
+			:start => params[:start],
+			:end => params[:end],
 		)
+
+	new_data = 
+		JSON[REDIS.get(session[:user_id])] << JSON[new_task.to_json(:exclude => [:user_id, :id])]
+
+	REDIS.set(session[:user_id], new_data.to_json)
 end
 
 # is this optimal?
 # cache
 get '/task/getAllTasks' do
 	content_type :json
-	json = []
-	Task.all(:user_id => session[:user_id]).each do |task|
-		json << JSON[task.to_json(:exclude => [:user_id, :id])]
+
+	if REDIS.get(session[:user_id]).nil?
+		json = []
+		Task.all(:user_id => session[:user_id]).each do |task|
+			json << JSON[task.to_json(:exclude => [:user_id, :id])]
+		end
+		REDIS.set(session[:user_id], json.to_json)
 	end
-	json.to_json
+
+	REDIS.get(session[:user_id])
 end
 
 post '/login_process' do

@@ -38,7 +38,7 @@ $(document).ready(function() {
 		editable: true,
 		eventLimit: true,
 		events: {
-			url: '/task/getAllTasks'
+			url: '/task/getAllTasks',
 		}
 	});
 });
